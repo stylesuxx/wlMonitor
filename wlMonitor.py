@@ -2,7 +2,6 @@
 import sys, argparse, json, time, os, pygame
 import xml.etree.ElementTree as et
 from quandoApi import Monitor
-pygame.init()
 
 class DisplaywlMonitor:
   screen = None
@@ -33,7 +32,8 @@ class DisplaywlMonitor:
     
     if not found:
       raise Exception('No suitable video driver found!')
-        
+
+    pygame.init()
     size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
     self.screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
     self.screen.fill((0, 0, 0))        
