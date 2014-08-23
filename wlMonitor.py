@@ -54,6 +54,7 @@ class DisplaywlMonitor:
     stations = self.monitor.getDepartures()
     for station in stations:
       fontLine = pygame.font.Font(None, 70)
+      fontTime = pygame.font.Font(None, 80)
       fontStation = pygame.font.Font(None, 50)
       fontTowards = pygame.font.Font(None, 30)
 
@@ -99,9 +100,14 @@ class DisplaywlMonitor:
         if diff < 0:
           timeColor = (255, 0, 0)
 
-        time = fontLine.render(departure, 1, timeColor)
-        timePos = time.get_rect(left = 530 + (100 * inner), top = 27 + 80 * counter)
-        background.blit(time, timePos)
+        departureSurface = pygame.Surface([100, 80])
+        departurePos = departureSurface.get_rect(left = 530 + (100 * inner), top = 27 + 80 * counter)
+        
+        timeText = fontTime.render(departure, 1, timeColor)
+        timePos = timeText.get_rect(centerx = 50, centery = 35)
+        
+        departureSurface.blit(timeText, timePos)
+        background.blit(departureSurface, departurePos)
         inner += 1
 
       counter += 1
