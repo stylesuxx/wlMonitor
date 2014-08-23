@@ -54,9 +54,9 @@ class DisplaywlMonitor:
     stations = self.monitor.getDepartures()
     for station in stations:
       fontLine = pygame.font.Font(None, 70)
-      fontTowards = pygame.font.Font(None, 30)
+      fontTowards = pygame.font.Font(None, 40)
 
-      bgColor = (255, 0, 0)
+      bgColor = (0, 0, 0)
       fgColor = (255, 255, 255)
       if station['line'] == 'U1':
         bgColor = (226, 20, 22)
@@ -69,27 +69,33 @@ class DisplaywlMonitor:
       if station['line'] == 'U6':
         bgColor = (136, 71, 31)
 
-      pygame.draw.rect(background, bgColor, [20, 20 + 80 * counter, 120, 70])
+      lineSurface = pygame.Surface([120, 70])
+      lineSurface.fill(bgColor)
       text = fontLine.render(station['line'], 1, fgColor)
-      textpos = text.get_rect(left = 50, top = 27 + (80 * counter))
-      background.blit(text, textpos)
+      textpos = text.get_rect(centerx = 60, centery = 35)
+      lineSurface.blit(text, textpos)
+      background.blit(lineSurface, [25, 27 + (80 * counter)])
 
       towards = fontTowards.render(station['towards'], 1, (255, 255, 255))
-      towardsPos = towards.get_rect(left = 180, top = 40 + 80 * counter)
+      towardsPos = towards.get_rect(left = 180, top = 45 + 80 * counter)
       background.blit(towards, towardsPos)
 
       inner = 0
       marked = False
       for departure in station['departures']:
+        if inner > 4:
+          break
         timeColor = (255, 255, 255)
-        if int(departure) - int(station['walk']) >= 0 and not marked:
+        diff = int(departure) - int(station['walk'])
+        if diff == 0:
           timeColor = (0, 255, 0)
-          marked = True
-        if int(departure) - int(station['walk']) < 0:
+        if diff > 0 and diff < 2:
+          timeColor = (0, 0, 255)
+        if diff < 0:
           timeColor = (255, 0, 0)
 
         time = fontLine.render(departure, 1, timeColor)
-        timePos = time.get_rect(left = 440 + (100 * inner), top = 27 + 80 * counter)
+        timePos = time.get_rect(left = 530 + (100 * inner), top = 27 + 80 * counter)
         background.blit(time, timePos)
         inner += 1
 
