@@ -14,12 +14,15 @@ class Monitor:
   ''' Return a JSON representation of the Departures for all stations '''
   def getDepartures(self):
     for station in self.stations:
+      station['fullname'] = 'Data not available'
+      station['departures'] = []
       req = self.buildRequest(station)
       res = self.postRequest(req)
-      departures = self.getDepartureTimes(res, station['towards'])
-      name = self.getStationName(res)
-      station['departures'] = departures
-      station['fullname'] = name
+      if(res):
+        departures = self.getDepartureTimes(res, station['towards'])
+        name = self.getStationName(res)
+        station['departures'] = departures
+        station['fullname'] = name
 
     return self.stations
 
@@ -43,10 +46,15 @@ class Monitor:
 
   ''' Sends an XML request to the API and returns a tree object of the XML response'''
   def postRequest(self, xml):
-    req = urllib2.Request(self.api, data = xml)
-    res = urllib2.urlopen(req)
-    data = res.read()
-    tree = et.fromstring(data)
+    tree = None
+    
+    try:
+      req = urllib2.Request(self.api, data = xml)
+      res = urllib2.urlopen(req)
+      data = res.read()
+      tree = et.fromstring(data)
+    except urllib2.HTTPError:
+      pass
 
     return tree
 
