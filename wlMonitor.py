@@ -54,7 +54,8 @@ class DisplaywlMonitor:
     stations = self.monitor.getDepartures()
     for station in stations:
       fontLine = pygame.font.Font(None, 70)
-      fontTowards = pygame.font.Font(None, 40)
+      fontStation = pygame.font.Font(None, 50)
+      fontTowards = pygame.font.Font(None, 30)
 
       bgColor = (0, 0, 0)
       fgColor = (255, 255, 255)
@@ -76,8 +77,12 @@ class DisplaywlMonitor:
       lineSurface.blit(text, textpos)
       background.blit(lineSurface, [25, 27 + (80 * counter)])
 
+      stationName = fontStation.render(station['fullname'], 1, (255, 255, 255))
+      stationPos = stationName.get_rect(left = 180, top = 30 + 80 * counter)
+      background.blit(stationName, stationPos)
+      
       towards = fontTowards.render(station['towards'], 1, (255, 255, 255))
-      towardsPos = towards.get_rect(left = 180, top = 45 + 80 * counter)
+      towardsPos = towards.get_rect(left = 180, top = 70 + 80 * counter)
       background.blit(towards, towardsPos)
 
       inner = 0
