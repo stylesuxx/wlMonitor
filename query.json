@@ -2,16 +2,19 @@
   {
     "name": "60201040",
     "line": "U1",
-    "towards": "Wien Leopoldau"
+    "towards": "Wien Leopoldau",
+    "walk": "10"
   },
   {
     "name": "60201040",
     "line": "U1",
-    "towards": "Wien Reumannplatz"
+    "towards": "Wien Reumannplatz",
+    "walk": "10"
   },
   {
-    "name": "214461108",
+    "name": "60201018",
     "line": "U4",
-    "towards": "Wien Heiligenstadt"
+    "towards": "Wien Heiligenstadt",
+    "walk": "5"
   }
 ]
