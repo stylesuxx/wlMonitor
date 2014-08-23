@@ -17,7 +17,9 @@ class Monitor:
       req = self.buildRequest(station)
       res = self.postRequest(req)
       departures = self.getDepartureTimes(res, station['towards'])
+      name = self.getStationName(res)
       station['departures'] = departures
+      station['fullname'] = name
 
     return self.stations
 
@@ -55,5 +57,11 @@ class Monitor:
     for departure in departureTimes:
       time = departure.get('countdown')
       departures.append(time)
-  
+
     return departures
+
+  def getStationName(self, xml):
+    name = xml.find("./response/monitor/locationStop/location")
+    name = name.get('title')
+
+    return name
