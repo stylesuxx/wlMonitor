@@ -2,6 +2,7 @@
 import sys, argparse, json, time, os, pygame
 import xml.etree.ElementTree as et
 from quandoApi import Monitor
+pygame.init()
 
 class DisplaywlMonitor:
   screen = None
@@ -104,10 +105,18 @@ parser.add_argument('in',
 
 args = parser.parse_args()
 display = DisplaywlMonitor(args)
-stopped = False
-while not stopped: 
-  try:
+counter = 0
+done = False
+while not done:
+  for event in pygame.event.get():
+    if event.type == pygame.KEYDOWN:
+      done = True
+  
+  if counter % 30 == 0:
     display.update()
-    time.sleep(30)
-  except KeyboardInterrupt:
-    stopped = True
+    counter = 0
+  
+  counter += 1
+  time.sleep(1)
+
+pygame.quit()
