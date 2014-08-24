@@ -54,6 +54,10 @@ class DisplaywlMonitor:
 
     stations = self.monitor.getDepartures()
     for station in stations:
+      if len(station['departures']) < 1:
+        continue
+      if int(station['departures'][0]) > 60:
+        continue
       fontLine = pygame.font.Font(None, 70)
       fontTime = pygame.font.Font(None, 70)
       fontStation = pygame.font.Font(None, 40)
