@@ -103,6 +103,9 @@ class DisplaywlMonitor:
         if inner > 2:
           break
 
+        if int(departure) > 60:
+          continue
+
         timeColor = (255, 255, 255)
         diff = int(departure) - int(station['walk'])
         
