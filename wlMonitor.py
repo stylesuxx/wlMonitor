@@ -34,6 +34,7 @@ class DisplaywlMonitor:
       raise Exception('No suitable video driver found!')
 
     pygame.init()
+    pygame.mouse.set_visible(False)
     size = (pygame.display.Info().current_w, pygame.display.Info().current_h)
     self.screen = pygame.display.set_mode(size, pygame.FULLSCREEN)
     self.screen.fill((0, 0, 0))        
@@ -53,9 +54,13 @@ class DisplaywlMonitor:
 
     stations = self.monitor.getDepartures()
     for station in stations:
+      if len(station['departures']) < 1:
+        continue
+      if int(station['departures'][0]) > 60:
+        continue
       fontLine = pygame.font.Font(None, 70)
-      fontTime = pygame.font.Font(None, 80)
-      fontStation = pygame.font.Font(None, 50)
+      fontTime = pygame.font.Font(None, 70)
+      fontStation = pygame.font.Font(None, 40)
       fontTowards = pygame.font.Font(None, 30)
 
       bgColor = (0, 0, 0)
@@ -71,37 +76,45 @@ class DisplaywlMonitor:
       if station['line'] == 'U6':
         bgColor = (136, 71, 31)
 
-      lineSurface = pygame.Surface([120, 70])
+      lineSurface = pygame.Surface([100, 70])
       lineSurface.fill(bgColor)
       text = fontLine.render(station['line'], 1, fgColor)
-      textpos = text.get_rect(centerx = 60, centery = 35)
+      textpos = text.get_rect(centerx = 50, centery = 35)
       lineSurface.blit(text, textpos)
-      background.blit(lineSurface, [25, 27 + (80 * counter)])
+      background.blit(lineSurface, [5, 5 + (80 * counter)])
 
-      stationName = fontStation.render(station['fullname'], 1, (255, 255, 255))
-      stationPos = stationName.get_rect(left = 180, top = 30 + 80 * counter)
+      stationColor = (255, 255, 255)
+      if int(station['departures'][-1]) < 0:
+        stationColor = (255, 0, 0)
+        del station['departures'][-1]
+
+      stationName = fontStation.render(station['fullname'], 1, stationColor)
+      stationPos = stationName.get_rect(left = 120, top = 10 + 80 * counter)
       background.blit(stationName, stationPos)
       
-      towards = fontTowards.render(station['towards'], 1, (255, 255, 255))
-      towardsPos = towards.get_rect(left = 180, top = 70 + 80 * counter)
+      towards = fontTowards.render(station['towards'], 1, stationColor)
+      towardsPos = towards.get_rect(left = 120, top = 50 + 80 * counter)
       background.blit(towards, towardsPos)
 
       inner = 0
       marked = False
+
       for departure in station['departures']:
-        if inner > 4:
+        if inner > 2:
           break
+
         timeColor = (255, 255, 255)
         diff = int(departure) - int(station['walk'])
+        
         if diff == 0:
           timeColor = (0, 255, 0)
-        if diff > 0 and diff < 2:
+        elif diff > 0 and diff < 2:
           timeColor = (0, 0, 255)
-        if diff < 0:
+        elif diff < 0:
           timeColor = (255, 0, 0)
 
-        departureSurface = pygame.Surface([100, 80])
-        departurePos = departureSurface.get_rect(left = 530 + (100 * inner), top = 27 + 80 * counter)
+        departureSurface = pygame.Surface([80, 80])
+        departurePos = departureSurface.get_rect(left = 400 + (80 * inner), top = 5 + 80 * counter)
         
         timeText = fontTime.render(departure, 1, timeColor)
         timePos = timeText.get_rect(centerx = 50, centery = 35)
