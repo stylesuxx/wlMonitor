@@ -66,6 +66,13 @@ class Monitor:
       time = departure.get('countdown')
       departures.append(time)
 
+    ''' Check for alerts '''
+    traffic = xml.findall("./response/monitor/lines/line/[@towards='" + towards + "']/refTrafficInfo")
+    if len(traffic) > 0:
+      alert = xml.findall("./response/trafficInfos/trafficInfoCategory/[@name='alert']")
+      if len(alert) > 0:
+        departures.append('-1')
+
     return departures
 
   def getStationName(self, xml):
@@ -74,3 +81,5 @@ class Monitor:
     	return name.get('title')
 	
     return 'Not available'
+
+
