@@ -83,26 +83,34 @@ class DisplaywlMonitor:
       lineSurface.blit(text, textpos)
       background.blit(lineSurface, [5, 5 + (80 * counter)])
 
-      stationName = fontStation.render(station['fullname'], 1, (255, 255, 255))
+      stationColor = (255, 255, 255)
+      if int(station['departures'][-1]) < 0:
+        stationColor = (255, 0, 0)
+        del station['departures'][-1]
+
+      stationName = fontStation.render(station['fullname'], 1, stationColor)
       stationPos = stationName.get_rect(left = 120, top = 10 + 80 * counter)
       background.blit(stationName, stationPos)
       
-      towards = fontTowards.render(station['towards'], 1, (255, 255, 255))
+      towards = fontTowards.render(station['towards'], 1, stationColor)
       towardsPos = towards.get_rect(left = 120, top = 50 + 80 * counter)
       background.blit(towards, towardsPos)
 
       inner = 0
       marked = False
+
       for departure in station['departures']:
         if inner > 2:
           break
+
         timeColor = (255, 255, 255)
         diff = int(departure) - int(station['walk'])
+        
         if diff == 0:
           timeColor = (0, 255, 0)
-        if diff > 0 and diff < 2:
+        elif diff > 0 and diff < 2:
           timeColor = (0, 0, 255)
-        if diff < 0:
+        elif diff < 0:
           timeColor = (255, 0, 0)
 
         departureSurface = pygame.Surface([80, 80])
