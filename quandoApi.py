@@ -18,7 +18,7 @@ class Monitor:
       station['departures'] = []
       req = self.buildRequest(station)
       res = self.postRequest(req)
-      if(res):
+      if res is not None:
         departures = self.getDepartureTimes(res, station['towards'])
         name = self.getStationName(res)
         station['departures'] = departures
