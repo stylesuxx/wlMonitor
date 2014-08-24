@@ -70,6 +70,7 @@ class Monitor:
 
   def getStationName(self, xml):
     name = xml.find("./response/monitor/locationStop/location")
-    name = name.get('title')
-
-    return name
+    if name is not None:
+    	return name.get('title')
+	
+    return 'Not available'
