@@ -53,7 +53,7 @@ class Monitor:
       res = urllib2.urlopen(req)
       data = res.read()
       tree = et.fromstring(data)
-    except urllib2.HTTPError:
+    except:
       pass
 
     return tree
